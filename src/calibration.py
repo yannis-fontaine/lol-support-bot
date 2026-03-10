@@ -1,8 +1,8 @@
+# -*- coding: utf-8 -*-
 import pyautogui
 import numpy as np
 import cv2
 
-# -*- coding: utf-8 -*-
 
 SCREEN_WIDTH, SCREEN_HEIGHT = pyautogui.size()
 
@@ -31,7 +31,12 @@ def calibrate_zone(nom):
     print(f"\nVérification visuelle — Appuie sur 'Q' pour valider, 'R' pour recommencer")
     while True:
         frame = capture_screen(region=region)
-        cv2.imshow(f"Calibration - {nom}", frame)
+        
+        # Agrandit l'image x5 pour mieux voir
+        frame_display = cv2.resize(frame, None, fx=2, fy=2, 
+                                   interpolation=cv2.INTER_NEAREST)
+        
+        cv2.imshow(f"Calibration - {nom}", frame_display)
         key = cv2.waitKey(1) & 0xFF
         if key == ord('q'):
             cv2.destroyAllWindows()
@@ -45,7 +50,10 @@ def calibrate_zone(nom):
 # Définition des zones à calibrer
 ZONES = [
     ("MINIMAP",         "la minimap"),
-    ("ALLY_HP_BARS",    "les barres de vie alliés (encadre les 5 portraits à gauche)"),
+    ("ALLY_1_HP_BAR",   "la barre de vie de l'allié 1 (en partant de la gauche)"),
+    ("ALLY_2_HP_BAR",   "la barre de vie de l'allié 2"),
+    ("ALLY_3_HP_BAR",   "la barre de vie de l'allié 3"),
+    ("ALLY_4_HP_BAR",   "la barre de vie de l'allié 4"),
     ("SELF_HP_BAR",     "ta propre barre de vie"),
     ("SELF_MANA_BAR",   "ta propre barre de mana"),
 ]
@@ -88,5 +96,5 @@ with open("config.py", "w") as f:
 
 print("\n✅ config.py généré avec succès !")
 print("Voici son contenu :\n")
-with open("config.py", "r") as f:
+with open("./src/config.py", "w", encoding="utf-8") as f:
     print(f.read())
